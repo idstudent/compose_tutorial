@@ -5,8 +5,11 @@ import android.widget.Space
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
@@ -21,7 +24,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PreviewMessageCard(Message("android", "compose"))
+            // 머티리얼 디자인 적용 (프로젝트명에 따라 이름이 달라짐)
+            // ComposeTutorial 이라고 플젝명을 지었으면 ComposeTutorialTheme 가 됨
+            ComposeTheme {
+                PreviewMessageCard(Message("android", "compose"))
+            }
         }
     }
 }
@@ -39,12 +46,25 @@ fun PreviewMessageCard(msg: Message) {
             modifier = Modifier
                 .size(40.dp) // 이미지 사이즈
                 .clip(CircleShape) // 이미지 동그라미
+                .border(1.5.dp, MaterialTheme.colors.secondary, CircleShape) // 이미지 바깥테두리 색 및 두께
         )
         // 이미지랑 텍스트 사이 마진 마지막줄에 쓰면 아마 텍스트 오른쪽에 마진을 주는거같음, 사이에 써줘야됨
         Spacer(modifier = Modifier.width(8.dp))
-        Text(text = "${msg.tv1}")
-        Spacer(modifier = Modifier.width(4.dp)) // 텍스트 사이 마진
-        Text(text = "${msg.tv2}")
+        Column {
+            Text(
+                text = msg.tv1,
+                color = MaterialTheme.colors.secondaryVariant, // 텍스트 색상
+                style = MaterialTheme.typography.subtitle2 // 폰트
+            )
+            Spacer(modifier = Modifier.width(4.dp)) // 텍스트 사이 마진
+            Surface(shape = MaterialTheme.shapes.medium, elevation = 1.dp) { // 버튼같은 ui로 나옴
+                Text(
+                    text = msg.tv2,
+                    modifier = Modifier.padding(all = 4.dp),
+                    style = MaterialTheme.typography.body2
+                )
+            }
+        }
     }
 }
 
